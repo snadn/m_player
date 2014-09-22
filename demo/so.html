@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>m_player demo</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<style>
+		h1,h2,h3,h4,h5,h6 {
+			margin: 0;
+		}
+		ul,li {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+		}
+		.g-mohe {
+			line-height: 143%
+		}
+		.g-mohe .title {
+			font-size: 16px
+		}
+		.g-mohe .g-aline {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap
+		}
+		.g-mohe .g-ellipsis {
+			-webkit-box-orient: vertical;
+			display: -webkit-box;
+			overflow: hidden;
+			white-space: normal
+		}
+		.g-mohe .g-clearfix:after,
+		.g-mohe .gclearfix:after {
+			clear: both;
+			content: ' ';
+			display: block;
+			line-height: 0;
+			visibility: hidden
+		}
+		.res-list.g-mohe.g-card {
+			padding-top: 9px;
+			padding-bottom: 9px
+		}
+		.res-list.g-card.g-block,
+		.g-card.g-block {
+			padding: 0
+		}
+		.mohe-cont {
+			color: #222;
+			padding: 15px
+		}
+		.mohe-wrap {
+			color: #222;
+			padding-left: 10px;
+			padding-right: 10px
+		}
+		.mohe-nav {
+			background-color: #fafafa;
+			border-top: 1px solid #eaeaea;
+			-webkit-box-sizing: border-box;
+			box-sizing: border-box;
+			height: 40px;
+			line-height: 40px
+		}
+		.mohe-more {
+			display: block;
+			text-align: center
+		}
+		.mohe-mask {
+			background-color: rgba(0, 0, 0, .8);
+			color: #fff
+		}
+		.mohe-navbar {
+			background-color: #fafafa;
+			border-top: 1px solid #eaeaea;
+			display: -webkit-box;
+			display: -ms-flexbox;
+			display: -webkit-flex;
+			display: flex;
+			height: 40px;
+			line-height: 40px
+		}
+		.mohe-nav .mh-list {
+			-webkit-box-orient: horizontal;
+			display: -webkit-box
+		}
+		.mohe-nav .mh-item {
+			-webkit-box-flex: 1;
+			box-sizing: border-box;
+			height: 16px;
+			margin: 13px 0 11px;
+			position: relative;
+			z-index: 0
+		}
+		.mohe-nav .mh-link {
+			display: block;
+			text-align: center
+		}
+		.mohe-bar.mohe-more {
+			background-color: #f7f7f7;
+			border: 1px solid #eaeaea;
+			-webkit-box-sizing: border-box;
+			box-sizing: border-box;
+			color: #222;
+			line-height: 35px
+		}
+		.mohe-link.mohe-more {
+			background-color: #fafafa;
+			border-top: 1px solid #eaeaea;
+			-webkit-box-sizing: border-box;
+			box-sizing: border-box;
+			height: 40px;
+			line-height: 40px
+		}
+		.mohe-fold.mohe-more {
+			background-color: #fafafa;
+			border-top: 1px solid #eaeaea;
+			-webkit-box-sizing: border-box;
+			box-sizing: border-box;
+			color: #222;
+			line-height: 35px
+		}
+		.mohe-navbar .mohe-item {
+			-webkit-box-flex: 1;
+			display: block;
+			-webkit-flex: 1;
+			-ms-flex: 1;
+			flex: 1;
+			position: relative;
+			text-align: center;
+			width: 1%
+		}
+		.g-mohe .mohe-icon {
+			background-color: #5cb642;
+			border-radius: 1px;
+			color: #fff;
+			display: inline-block;
+			font: 12px/16px microsoft yahei;
+			height: 16px;
+			margin-left: 4px;
+			margin-top: -2px;
+			padding: 0 5px;
+			text-align: center;
+			vertical-align: middle
+		}
+		.mohe-nav .mohe-more::after,
+		.mohe-link.mohe-more::after {
+			border-top: 2px solid #6d84fa;
+			border-right: 2px solid #6d84fa;
+			content: '';
+			display: inline-block;
+			height: 7px;
+			margin-left: 5px;
+			-webkit-transform: rotate(45deg);
+			-ms-transform: rotate(45deg);
+			transform: rotate(45deg);
+			-webkit-transform-origin: center;
+			-ms-transform-origin: center;
+			transform-origin: center;
+			width: 7px
+		}
+		.mohe-fold.mohe-more::before {
+			content: attr(title)
+		}
+		.mohe-fold.mohe-more::after {
+			border-bottom: 2px solid #999;
+			border-right: 2px solid #999;
+			content: '';
+			display: inline-block;
+			height: 7px;
+			margin-left: 5px;
+			-webkit-transform: rotate(45deg);
+			-ms-transform: rotate(45deg);
+			transform: rotate(45deg);
+			-webkit-transform-origin: right bottom;
+			-ms-transform-origin: right bottom;
+			transform-origin: right bottom;
+			width: 7px
+		}
+		.mohe-nav .mh-item~.mh-item {
+			border-left: 1px solid #cdcdcd
+		}
+		.mohe-nav .mh-item .mh-link {
+			overflow: hidden;
+			position: relative;
+			text-overflow: ellipsis;
+			top: -13px
+		}
+		.mohe-navbar .mohe-item ~ .mohe-item {
+			margin-left: 1px
+		}
+		.mohe-fold.mohe-more.mohe-open::before {
+			content: attr(opentitle)
+		}
+		.mohe-fold.mohe-more.mohe-open::after {
+			border-top: 2px solid #999;
+			border-right: 2px solid #999;
+			border-bottom: none;
+			-webkit-transform: rotate(-45deg);
+			-ms-transform: rotate(-45deg);
+			transform: rotate(-45deg);
+			-webkit-transform-origin: right top;
+			-ms-transform-origin: right top;
+			transform-origin: right top
+		}
+		.mohe-navbar .mohe-item ~ .mohe-item::after {
+			background: #cdcdcd;
+			bottom: 13px;
+			content: "";
+			display: block;
+			left: -1px;
+			overflow: hidden;
+			position: absolute;
+			top: 13px;
+			width: 1px
+		}
+		.g-card.g-block .title .res-title {
+			background-color: #fafafa;
+			display: block;
+			height: 40px;
+			line-height: 40px;
+			overflow: hidden;
+			padding: 0 10px;
+			text-overflow: ellipsis;
+			white-space: nowrap
+		}
+		.g-mohe .mohe-icon.ency:after {
+			content: "\0033\0036\0030\767e\79d1"
+		}
+		.g-mohe .mohe-icon.music:after {
+			content: "\0033\0036\0030\97f3\4e50"
+		}
+		.g-mohe .mohe-icon.video:after {
+			content: "\0033\0036\0030\89c6\9891"
+		}
+		.g-mohe .mohe-icon.pic:after {
+			content: "\0033\0036\0030\56fe\7247"
+		}
+		.g-mohe .mohe-icon.offsite:after {
+			content: "\5b98\7f51"
+		}
+		.g-mohe .mohe-icon.offver:after {
+			content: "\5b98\65b9\7248"
+		}
+		.g-card {
+			background-color: #fff;
+			box-shadow: 0 0 4px 1px rgba(0, 0, 0, .15);
+			margin: 10px 10px 0;
+			padding: 0 15px
+		}
+
+		.res-list a,
+		.res-list .res-title {
+			text-decoration: none
+		}
+		.res-list em,
+		.res-list b {
+			color: #DA142B
+		}
+	</style>
+	<!-- loader -->
+	<script src="http://s1.qhimg.com/!88362c39/_360mso_ob_loader.js"></script>
+</head>
+
+<body>
+	<div id="page">
+		<div id="main">
+			<div class="res-list g-mohe" id="mohe-m-music">
+
+				<link rel="stylesheet" type="text/css" href="http://s0.qhimg.com/static/7fe635dc28fbe00a/css_music.css">
+				<style>
+					#mohe-m-music .mh-box-2 .mh-title {
+						display: inline-block;
+						max-width: 75%;
+						white-space: nowrap;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						vertical-align: bottom;
+						color: #333333;
+					}
+					#mohe-m-music .mh-box-2 .mohe-cont {
+						padding: 0;
+					}
+					#mohe-m-music .mh-box-2 .mh-logo {
+						float: right;
+						color: #999;
+						font-size: 14px;
+					}
+					#mohe-m-music .mh-box-2 .mh-singer {
+						position: relative;
+						width: 100%;
+					}
+					#mohe-m-music .mh-box-2 .mh-bg-progress {
+						position: absolute;
+						left: 0;
+						top: 0;
+						background-color: #edf7eb;
+						display: block;
+						height: 100%;
+					}
+					#mohe-m-music .mh-box-2 .mh-info {
+						display: -webkit-box;
+						display: -moz-box;
+						display: -ms-flexbox;
+						display: -webkit-flex;
+						display: flex;
+						-webkit-box-align: center;
+						-moz-box-align: center;
+						-webkit-align-items: center;
+						align-items: center;
+						position: relative;
+						margin: 0 15px;
+						border-top: 1px solid #f3f3f3;
+					}
+					#mohe-m-music .mh-box-2 .mh-singer:first-child .mh-info {
+						border-top: none;
+					}
+					#mohe-m-music .mh-box-2 .mh-info .play {
+						display: -webkit-box;
+						display: -moz-box;
+						display: -ms-flexbox;
+						display: -webkit-flex;
+						display: flex;
+						-webkit-box-flex: 1;
+						-moz-box-flex: 1;
+						-webkit-flex: 1;
+						-ms-flex: 1;
+						flex: 1;
+						-webkit-box-align: center;
+						-webkit-align-items: center;
+						-moz-align-items: center;
+						-ms-align-items: center;
+						align-items: center;
+					}
+					#mohe-m-music .mh-box-2 .mh-song {
+						-webkit-box-flex: 1;
+						-moz-box-flex: 1;
+						-webkit-flex: 1;
+						-ms-flex: 1;
+						flex: 1;
+						margin-right: 10px;
+					}
+					#mohe-m-music .mh-box-2 .mh-song h3 {
+						font-size: 14px;
+						color: #666666;
+						padding-top: 4px;
+					}
+					#mohe-m-music .mh-box-2 .mh-song div {
+						font-size: 12px;
+						color: #cccccc;
+						padding-bottom: 4px;
+					}
+					#mohe-m-music .mh-box-2 .mh-dl-btn {
+						margin-left: 10px;
+					}
+					#mohe-m-music .mh-box-2 .mh-lyric {
+						display: block;
+						width: 35px;
+						height: 20px;
+						border: 1px solid #6bb65f;
+						text-align: center;
+						font-size: 10px;
+						color: #6bb65f;
+						-webkit-transition: all 100ms;
+					}
+					#mohe-m-music .mh-box-2 .mh-lyric:visited {
+						color: #6bb65f;
+					}
+					/* 优化CSS 单曲播放 */
+					#mohe-m-music .mh-box-1 .mh-title {
+						display: inline-block;
+						max-width: 75%;
+						white-space: nowrap;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						vertical-align: bottom;
+					}
+					#mohe-m-music .mh-box-1 .mh-logo {
+						float: right;
+						color: #999;
+						font-size: 14px;
+					}
+					#mohe-m-music .mh-box-1 .mh-singer {
+						display: -webkit-box;
+						display: -moz-box;
+						display: -ms-flexbox;
+						display: -webkit-flex;
+						display: flex;
+						-webkit-box-align: center;
+						-moz-box-align: center;
+						-webkit-align-items: center;
+						align-items: center;
+						position: relative;
+					}
+					#mohe-m-music .mh-box-1 .mh-photo {
+						width: 50px;
+						height: 50px;
+						border: 1px solid #e4e4e4;
+						padding: 2px;
+						margin-right: 10px;
+					}
+					#mohe-m-music .mh-box-1 .mh-photo img {
+						width: 50px;
+						height: 50px;
+					}
+					#mohe-m-music .mh-box-1 .mh-info {
+						-webkit-box-flex: 1;
+						-moz-box-flex: 1;
+						-webkit-flex: 1;
+						-ms-flex: 1;
+						flex: 1;
+					}
+					#mohe-m-music .mh-box-1 .mh-info p {
+						margin: 5px;
+					}
+					#mohe-m-music .mh-box-1 .mh-play {
+						width: 80px;
+					}
+					#mohe-m-music .mh-box-1 .mh-play .mh-btn-wrap {
+						display: -webkit-box;
+						display: -webkit-flex;
+						display: flex;
+						-webkit-box-pack: justify;
+						-webkit-justify-content: space-between;
+						justify-content: space-between;
+					}
+					#mohe-m-music .mh-box-1 .mh-time {
+						font-size: 12px;
+						text-align: center;
+						margin-top: 2px;
+						visibility: hidden;
+					}
+					#mohe-m-music .mh-box-1 .mh-time-now {
+						color: #5cb642;
+					}
+					#mohe-m-music .mh-box-1 .mh-time .mh-sep {
+						color: #5cb642;
+					}
+					#mohe-m-music .mh-box-1 .mh-time-total {
+						color: #999;
+					}
+					#mohe-m-music .mh-box-1 .mh-progress-wrap {
+						position: relative;
+						margin: 10px 0;
+					}
+					#mohe-m-music .mh-box-1 .mh-progress {
+						height: 7px;
+						border-radius: 4px;
+						background: #e1e1e1;
+					}
+					#mohe-m-music .mh-box-1 .mh-progress-loaded {
+						width: 0;
+						height: 7px;
+						border-radius: 4px;
+						margin-bottom: -7px;
+						background: #d1d1d1;
+					}
+					#mohe-m-music .mh-box-1 .mh-progress-position {
+						width: 0;
+						height: 7px;
+						border-radius: 4px;
+						background: #5cb642;
+					}
+					#mohe-m-music .mh-box-1 .mh-progress-midd {
+						position: absolute;
+						top: 0;
+						left: 0;
+						width: 40px;
+						height: 40px;
+						margin-top: -16px;
+						margin-left: -20px;
+						border-radius: 12px;
+						background: url(http://p4.qhimg.com/d/inn/40dee558/progress-middle-inside.png) no-repeat center;
+					}
+					#mohe-m-music .mh-box-1 .mh-lyric-wrap {
+						display: none;
+						margin-top: 10px;
+					}
+					#mohe-m-music .mh-box-1 .mh-lyric {
+						font-size: 12px;
+						position: relative;
+					}
+					#mohe-m-music .mh-box-1 .mh-lyric li {
+						min-height: .4em;
+					}
+					#mohe-m-music .mh-box-1 .mh-lyric.mh-part {
+						max-height: 120px;
+						overflow: hidden;
+					}
+					#mohe-m-music .mh-box-1 .mh-btn-lyric {
+						display: block;
+						width: 110px;
+						height: 20px;
+						font-size: 12px;
+						background-color: #f6f6f6;
+						color: #666;
+						border: 1px solid #eaeaea;
+						text-align: center;
+						margin-top: 4px;
+					}
+					#mohe-m-music .mh-box-1 .mh-source {
+						margin-top: 5px;
+						font-size: 12px;
+						color: #999999;
+						padding-left: 5px;
+					}
+					#mohe-m-music .mh-box-1 .mh-other {
+						border-top: 1px solid #f3f3f3;
+						padding-bottom: 5px;
+					}
+					#mohe-m-music .mh-box-1 .mh-other-title {
+						padding: 10px 0;
+					}
+					#mohe-m-music .mh-box-1 .mh-other-name {
+						display: inline-block;
+						color: #666666;
+						background-color: #F7F7F7;
+						height: 28px;
+						line-height: 26px;
+						text-align: center;
+						border: 1px solid #E4E4E4;
+						margin-right: 10px;
+						font-size: 14px;
+						padding: 0px 15px;
+						margin-bottom: 10px;
+					}
+					#mohe-m-music .mh-box-1 .lrc-curr {
+						color: #5cb642;
+					}
+				</style>
+
+				<div class="g-card g-block">
+					<div class="mh-box-1">
+						<a href="http://m.music.so.com/mS?q=%E7%88%B1%E5%A6%82%E6%BD%AE%E6%B0%B4" class="title">
+							<h3 class="res-title">
+								<span class="mh-title">
+									<em>爱如潮水</em>
+								</span><i class="mohe-icon music"></i>
+							</h3>
+						</a>
+						<div class="mohe-cont">
+							<div class="mh-singer">
+								<div class="mh-photo js-player-info-img"></div>
+								<div class="mh-info">
+									<p class="g-aline">歌手：
+										<span class="js-player-info-singer">张信哲</span>
+									</p>
+									<p class="g-aline">专辑：
+										<span class="js-player-info-album">回来</span>
+									</p>
+								</div>
+								<div class="mh-play">
+									<div class="mh-btn-wrap">
+										<a href="#play" class="btn-play js-360-playin" data-id="9413">
+											<span class="after"></span>
+										</a>
+										<a href="http://music.so.com/download/mb.html?id=9413" class="mh-dl-btn-b">
+											<span class="after"></span>
+										</a>
+									</div>
+									<div class="mh-time js-play-time">
+										<span class="mh-time-now js-play-time-now">00:00</span>
+										<span class="mh-sep">/</span>
+										<span class="mh-time-total js-play-time-total">00:00</span>
+									</div>
+								</div>
+							</div>
+							<div class="mh-progress-wrap">
+								<div class="mh-progress">
+									<div class="mh-progress-loaded js-player-loaded"></div>
+									<div class="mh-progress-position js-player-position"></div>
+								</div>
+								<div class="mh-progress-midd js-player-position-slider"></div>
+							</div>
+							<div class="mh-lyric-wrap">
+								<div class="mh-lyric mh-part js-lyric-wrap">
+									<ul class="js-player-lyric"></ul>
+								</div>
+								<div class="mh-lyric-more"><a class="mh-btn-lyric js-lyric-down" href="#down">点击查看全部歌词</a><a class="mh-btn-lyric js-lyric-up" href="#up" style="display:none">收起</a>
+								</div>
+							</div>
+							<div class="mh-source">来自:
+								<span class="js-player-info-from">一听音乐</span>
+							</div>
+						</div>
+						<input type="hidden" name="id" value="9413">
+					</div>
+				</div>
+				<div class="g-card g-block">
+					<div class="mh-box-2">
+						<div class="title mh-color">
+							<h3 class="res-title">
+								<span class="mh-title">您可能要找：</span>
+							</h3>
+						</div>
+						<div class="mohe-cont js-mohe-cont">
+							<ul class="mh-list">
+								<li class="mh-singer">
+									<div class="mh-bg-progress js-player-position"></div>
+									<div class="mh-info">
+										<a href="#play" class="js-360-playin play" data-id="59769">
+											<div class="mh-song">
+												<h3 class="g-aline">爱如潮水&nbsp;－&nbsp;张学友</h3>
+												<div class="g-aline">专辑：张学友 活出生命 live 演唱会</div>
+											</div>
+											<div class="mh-play-btn">
+												<span class="after"></span>
+											</div>
+										</a>
+										<a class="mh-dl-btn" href="http://music.so.com/download/mb.html?id=59769">
+											<span class="after"></span>
+										</a><a class="mh-lyric" style="display:none;" href="http://m.so.com/s?q=%E7%88%B1%E5%A6%82%E6%BD%AE%E6%B0%B4%20%E6%AD%8C%E8%AF%8D">歌词</a>
+									</div>
+								</li>
+								<li class="mh-singer">
+									<div class="mh-bg-progress js-player-position"></div>
+									<div class="mh-info">
+										<a href="#play" class="js-360-playin play" data-id="9873">
+											<div class="mh-song">
+												<h3 class="g-aline">爱如潮水&nbsp;－&nbsp;迪克牛仔</h3>
+												<div class="g-aline">专辑：别港</div>
+											</div>
+											<div class="mh-play-btn">
+												<span class="after"></span>
+											</div>
+										</a>
+										<a class="mh-dl-btn" href="http://360mobile.open.duomi.com/download/mb.html?id=9873">
+											<span class="after"></span>
+										</a><a class="mh-lyric" style="display:none;" href="http://m.so.com/s?q=%E7%88%B1%E5%A6%82%E6%BD%AE%E6%B0%B4%20%E6%AD%8C%E8%AF%8D">歌词</a>
+									</div>
+								</li>
+								<li class="mh-singer">
+									<div class="mh-bg-progress js-player-position"></div>
+									<div class="mh-info">
+										<a href="#play" class="js-360-playin play" data-id="75295">
+											<div class="mh-song">
+												<h3 class="g-aline">爱如潮水&nbsp;－&nbsp;蔡淳佳</h3>
+												<div class="g-aline">专辑：蔡淳佳joi同名专辑</div>
+											</div>
+											<div class="mh-play-btn">
+												<span class="after"></span>
+											</div>
+										</a>
+										<a class="mh-dl-btn" href="http://music.so.com/download/mb.html?id=75295">
+											<span class="after"></span>
+										</a><a class="mh-lyric" style="display:none;" href="http://m.so.com/s?q=%E7%88%B1%E5%A6%82%E6%BD%AE%E6%B0%B4%20%E6%AD%8C%E8%AF%8D">歌词</a>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+
+				<script type="text/javascript" src="../lib/zepto.js"></script>
+				<script type="text/javascript" src="../lib/soundmanager2.js"></script>
+				<script type="text/javascript" src="../src/inlinePlayer.js"></script>
+				<script>
+				(function() {
+					var root = $('#mohe-m-music');
+
+					var id = $('input[name="id"]', root).val();
+
+					PlayBox.PLUGINS['position_slider'] = function(pm) {
+						var docEle = $(pm.playboxElement.prop('ownerDocument')),
+							positionWrap = $(''),
+							playerSliderEle = $(''),
+							playerPositionEle = $('');
+						var moveHandle = null;
+
+						function showPosition(percent) {
+							if (!pm.position.showPositionStop && percent !== false) {
+								playerSliderEle.css('left', percent + '%');
+							}
+						}
+
+						function startPositionFun(e) {
+							e.preventDefault();
+
+							if (pm.soundObject && pm.soundObject.playState == 1) {
+
+								// 拖拽时为了能尽量鼠标跟随，因此去掉transition渐变
+								positionWrap.removeClass('anim-slider');
+
+								// 暂停进度条动画
+								pm.position.showPositionStop = true;
+
+								moveHandle = movePositionFun(e);
+
+								docEle.on('touchmove', moveHandle).on('touchend', dropPositionFun);
+							};
+						}
+
+						function dropPositionFun(e) {
+							e.preventDefault();
+
+							docEle.off('touchmove', moveHandle).off('touchend', dropPositionFun);
+
+							var oSound = pm.soundObject;
+
+							if (pm.position.showPositionStop && oSound) {
+								// 拖拽时为了能尽量鼠标跟随，因此去掉transition渐变
+								positionWrap.addClass('anim-slider');
+
+								var position = parseFloat(playerSliderEle.attr('data-position')) / 100,
+									newPosition = oSound.durationEstimate * position;
+								if (position >= 0 && position <= 1) {
+									oSound.setPosition(newPosition);
+								}
+							}
+
+							pm.position.showPositionStop = false;
+						}
+
+						function movePositionFun(e) {
+							var touch = e.touches[0];
+							$.each(e.touches, function(index, item) {
+								if (item.target === playerSliderEle[0]) {
+									touch = item;
+									return false;
+								}
+							});
+
+							var x = touch.pageX,
+								percent = parseInt(playerSliderEle.css('left'));
+
+							return function(e) {
+								e.preventDefault();
+
+								var touch = e.touches[0];
+								$.each(e.touches, function(index, item) {
+									if (item.target === playerSliderEle[0]) {
+										touch = item;
+										return false;
+									}
+								});
+
+								var totalWidth = positionWrap.width(),
+									mouse_left = touch.pageX,
+									now_percent = percent + (mouse_left - x) / totalWidth * 100;
+
+								if (now_percent <= 100 && now_percent >= 0) {
+									playerSliderEle.css('left', now_percent + '%').attr('data-position', now_percent);
+									playerPositionEle.css('width', now_percent + '%');
+								}
+							}
+						}
+
+						pm.on('start', function() {
+							positionWrap = $('.mh-progress-wrap', pm.playItemElement),
+							playerSliderEle = $('.js-player-position-slider', positionWrap),
+							playerPositionEle = $('.js-player-position', positionWrap);;
+
+							pm.position = {
+								showPositionStop: false
+							};
+
+							playerSliderEle.on('touchstart', startPositionFun);
+						}).on('whileplaying', function() {
+							var percent = PlayBox.Helper.getSoundPercent(pm.soundObject);
+							showPosition(percent);
+						}).on('finish stop loadfail failure', function() {
+							docEle.off('touchmove', moveHandle).off('touchend', dropPositionFun);
+
+							showPosition(0);
+							playerPositionEle.css('width', 0);
+							pm.position.showPositionStop = false;
+						}).on('stop loadfail failure', function() {
+							playerSliderEle.off('touchstart', startPositionFun);
+						});
+					};
+
+					PlayBox.PLUGINS['showtime'] = function(pm) {
+						var playerTimeEle = $('.js-play-time', pm.playItemElement),
+							playerTimeTotalEle = $('.js-play-time-total', pm.playItemElement),
+							playerTimeNowEle = $('.js-play-time-now', pm.playItemElement);
+
+						function showTime() {
+							if (pm.position.showPositionStop || !pm.soundObject) {
+								return;
+							}
+
+							var total = pm.soundObject.durationEstimate,
+								curPosition = pm.soundObject.position;
+
+							if (curPosition) {
+								var curMinute = parseInt(curPosition / 1000 / 60);
+								if (curMinute < 10) {
+									curMinute = '0' + curMinute;
+								}
+								var curSecond = Math.ceil((curPosition / 1000) % 60);
+								if (curSecond < 10) {
+									curSecond = '0' + curSecond;
+								}
+
+								if (curSecond == 60) {
+									curSecond = '00';
+									var arrMinute = curMinute.split('');
+									curMinute = arrMinute[0] + '' + (parseInt(arrMinute[1]) + 1);
+								}
+
+								playerTimeNowEle.text(curMinute + ':' + curSecond);
+							}
+							if (total) {
+								var totalSecond = Math.ceil((total / 1000) % 60);
+								var totalMinute = parseInt(total / 1000 / 60);
+								if (totalSecond < 10) {
+									totalSecond = '0' + totalSecond;
+								} else if (totalSecond == 60) {
+									//由于总数有可能不足分钟，但是等于0.999，所以在秒数ceil之后就变成了60
+									//举例如：1277626
+									totalSecond = '00';
+									totalMinute = totalMinute + 1;
+								}
+								if (totalMinute < 10) {
+									totalMinute = '0' + totalMinute;
+								}
+								playerTimeTotalEle.text(totalMinute + ':' + totalSecond);
+							}
+						}
+
+						pm.on('startplaying', function() {
+							playerTimeEle.css('visibility', 'visible');
+						}).on('whileplaying', function() {
+							showTime();
+						}).on('stop finish loadfail failure', function() {
+							playerTimeNowEle.text('00:00');
+						});
+					};
+
+					PlayBox.PLUGINS['lyric'] = function(pm) {
+						var lrcWrapEl = $('.mh-lyric-wrap', pm.playboxElement);
+						var lrcBoxEl = $('.mh-lyric', lrcWrapEl);
+						var lrcEl = $('.js-player-lyric', lrcWrapEl);
+						var lrcDownBtn = $('.js-lyric-down', lrcWrapEl);
+						var lrcUpBtn = $('.js-lyric-up', lrcWrapEl);
+
+
+						var //是否显示歌词
+							isShowLrc = false;
+
+
+						var old_lrc = $('');
+						var curr_lrc = $('');
+
+						//歌词，按照时间的先后先后顺序放在数字里面。
+						var lrcSortArr = [];
+
+
+						function parseLrc(lrc) {
+							if (!lrc) {
+								return;
+							}
+							var __offsetReg = /\[offset:[+|-]?\d+?(?=\])/;
+							var __splitReg = /\n|\r/;
+							var __timeReg = /\[\d{2,}:\d{2}(?:[\.|:]\d{2,5})?\]/g;
+							var __headReg = /\[([a-z]+)\:(\S*)\]/;
+
+							function __timeToms(time) {
+								var t = time.split(":"),
+									m = t[0],
+									s, ms;
+								if (t.length === 3) {
+									s = t[1];
+									ms = t[2]
+								} else {
+									t = t[1].split(".");
+									s = t[0];
+									ms = t[1]
+								}
+								return~~ m * 60 * 1e3 + ~~s * 1e3 + ~~ms
+							}
+							var lrcArr = [],
+								lrcHeadObj = {},
+								lrcObj = {},
+								offset = 0,
+								arrLrc, line, time, txt;
+							var timeArr = [];
+							if (match = lrc.match(__offsetReg)) {
+								offset = ~~match[0].slice(8)
+							}
+							arrLrc = lrc.split(__splitReg);
+							for (var i = 0, len = arrLrc.length; i < len; i++) {
+								line = arrLrc[i];
+								if (match = line.match(__timeReg)) {
+									for (var j = 0, len2 = match.length; j < len2; j++) {
+										time = __timeToms(match[j].slice(1, -1)) + offset;
+										txt = $.trim(line.split(match.join("")).join(""));
+										lrcObj[time] = txt;
+
+										timeArr.push(time);
+									}
+								} else if (match = line.match(__headReg)) {
+									lrcHeadObj[match[1]] = match[2];
+								}
+							}
+
+
+							for (var ii in lrcObj) {
+								lrcArr.push([ii, lrcObj[ii]]);
+							}
+
+							if (lrcArr.length) {
+								lrcArr = lrcArr.sort(function(a, b) {
+									return a[0] - b[0]
+								});
+							}
+
+							return lrcArr;
+						}
+
+						function getLrcInfo(lrcInfo) {
+							var lrcArr = [];
+							var html = '';
+							var lyricWithoutTime = '';
+
+							if (lrcInfo.dynamic) {
+								lrcArr = parseLrc(lrcInfo.lyric);
+
+								var lrcshow_index = 0;
+								$.each(lrcArr, function(index, item) {
+									if ($.trim(item[1])) {
+										var className = '';
+										if (item[0] == 0) {
+											className = 'lrc-curr';
+										}
+										html += '<li js-data-time="' + Math.round(item[0] / 500) + '" js-data-i="' + (lrcshow_index++) + '" class="' + className + '">' + item[1] + '</li>';
+									} else {
+										html += '<li> </li>';
+									}
+									lyricWithoutTime += item[1] + '\r\n';
+								});
+							} else {
+								lrcArr = lrcInfo.lyric.split('\n');
+
+								$.each(lrcArr, function(index, item) {
+									html += '<li>' + item + '</li>';
+									lyricWithoutTime += item + '\r\n';
+								});
+							}
+
+
+							lrcInfo.lyricWithoutTime = lyricWithoutTime;
+							lrcInfo.html = html;
+							return lrcInfo;
+						}
+
+						/*现在使用的是这个方法*/
+						function getLrcInfo2(lrcInfo) {
+							var lrcArr = [];
+							var html = '';
+							var lyricWithoutTime = '';
+							/*歌词的现实顺序的时间*/
+							var sortTimerArr = [];
+
+
+							if (lrcInfo.dynamic) {
+								lrcArr = parseLrc(lrcInfo.lyric);
+
+								var lrcshow_index = 0;
+								$.each(lrcArr, function(index, item) {
+									if ($.trim(item[1])) {
+										var className = '';
+										if (item[0] == 0) {
+											className = 'lrc-curr';
+										}
+										sortTimerArr.push(item[0]);
+										html += '<li js-data-time="' + item[0] + '" js-data-i="' + (lrcshow_index++) + '" class="' + className + '">' + item[1] + '</li>';
+									} else {
+										html += '<li js-data-time="' + item[0] + '"> </li>';
+									}
+									lyricWithoutTime += item[1] + '\r\n';
+								});
+							} else {
+								lrcArr = lrcInfo.lyric.split('\n');
+
+								$.each(lrcArr, function(index, item) {
+									html += '<li>' + item + '</li>';
+									lyricWithoutTime += item + '\r\n';
+								});
+							}
+
+
+							lrcInfo.lyricWithoutTime = lyricWithoutTime;
+							lrcInfo.html = html;
+							lrcInfo.sortTimerArr = sortTimerArr;
+							return lrcInfo;
+						}
+
+						function getLrcById(id, from) {
+							return $.ajax({
+								url: 'http://s.music.so.com/player/lyrics',
+								data: {
+									id: id,
+									c: from
+								},
+								dataType: 'jsonp'
+							}).then(function(d) {
+								/*异步接口，判断歌曲和歌词是否对应*/
+								if (pm.soundConf && d.songId == pm.soundConf.songId) {
+									if (d && d.lyric) {
+										if (d.dynamic) {
+											isShowLrc = true;
+										}
+										return d;
+									} else {
+										return false;
+									}
+								}
+							});
+						}
+
+						lrcDownBtn.on('click', function(e) {
+							e.preventDefault();
+
+							lrcDownBtn.hide();
+							lrcUpBtn.show();
+							lrcBoxEl.removeClass('mh-part');
+						});
+						lrcUpBtn.on('click', function(e) {
+							e.preventDefault();
+
+							lrcUpBtn.hide();
+							lrcDownBtn.show();
+							lrcBoxEl.addClass('mh-part');
+
+							pm.playboxElement[0].scrollIntoView && pm.playboxElement[0].scrollIntoView();
+						});
+
+
+						pm.on('soundready', function(e, d) {
+							getLrcById(d.songId, d.serviceEngName).then(function(lrcInfo) {
+								if (lrcInfo !== false) {
+									lrcSortArr = [];
+									lrcWrapEl.show();
+									/*console.info(lrcInfo);*/
+
+									/*lrcInfo = getLrcInfo(lrcInfo);*/
+									lrcInfo = getLrcInfo2(lrcInfo);
+									lrcEl.html(lrcInfo.html);
+
+									var sortTimerArr = lrcInfo.sortTimerArr;
+									for (var i = 0; i < sortTimerArr.length; i++) {
+										lrcSortArr.push([sortTimerArr[i], $('li[js-data-time="' + sortTimerArr[i] + '"]', lrcEl)]);
+									}
+								}
+							});
+						}).on('whileplaying', function() {
+
+							if (isShowLrc) {
+								var currMis = pm.soundObject.position;
+
+								//根据当前播放时间查找应该显示的歌词
+								for (var i = 0, len = lrcSortArr.length; i < len; i++) {
+									var thisLoop = lrcSortArr[i];
+									if (i == 0 && currMis < thisLoop[0]) {
+										break;
+									}
+
+									if ((i + 1) < len) {
+										if (currMis >= thisLoop[0] && currMis < lrcSortArr[i + 1][0]) {
+											curr_lrc = thisLoop[1];
+											break;
+										} else {
+											continue;
+										}
+									} else {
+										curr_lrc = thisLoop[1];
+									}
+								}
+
+								/*判断当前显示的歌词与需要显示的歌词是否相同*/
+								var isSame = (curr_lrc.attr('js-data-time') == old_lrc.attr('js-data-time'));
+
+								if (!isSame) {
+									old_lrc.removeClass("lrc-curr");
+									curr_lrc.addClass("lrc-curr");
+
+									var currLrcOffsetTop = curr_lrc[0].offsetTop,
+										lrcBoxElHeight = lrcBoxEl.height(),
+										lyricHeight = curr_lrc.height();
+
+									//如果当前歌词距离父容器的高度大于父容器的一般，则不需要滚动。
+									if (currLrcOffsetTop >= (lrcBoxElHeight / 2 - lyricHeight / 2)) {
+										var scrollTopForthis = currLrcOffsetTop - lrcBoxElHeight / 2 + lyricHeight / 2;
+										//lrcBoxEl.scrollTop(scrollTopForthis);
+
+										lrcEl.css({
+											"transition": "500ms cubic-bezier(0.1, 0.57, 0.1, 1)",
+											"-webkit-transition": "500ms cubic-bezier(0.1, 0.57, 0.1, 1)",
+											"transform": "translate(0px, " + (-scrollTopForthis) + "px) translateZ(0px)",
+											"-webkit-transform": "translate(0px, " + (-scrollTopForthis) + "px) translateZ(0px)"
+										});
+									} else {
+										lrcEl.css({
+											"transition": "500ms cubic-bezier(0.1, 0.57, 0.1, 1)",
+											"-webkit-transition": "500ms cubic-bezier(0.1, 0.57, 0.1, 1)",
+											"transform": "translate(0px, 0px) translateZ(0px)",
+											"-webkit-transform": "translate(0px, 0px) translateZ(0px)"
+										});
+									}
+
+									old_lrc = curr_lrc;
+								}
+							}
+
+
+
+
+
+
+
+						});
+					};
+
+					PlayBox.PLUGINS['musicinfo'] = function(pm) {
+						var infoEl = pm.playboxElement;
+
+						pm.on('soundready', function(e, d) {
+							if (d.albumImg || d.image) {
+								$('.js-player-info-img', infoEl).html('<img src="' + (d.albumImg || d.image) + '">');
+							}
+							$('.js-player-info-from', infoEl).html(d.serviceName || '');
+						});
+					}
+
+					var p1 = new PlayBox({
+						'id': id,
+						'playboxElement': $('.mh-box-1', root),
+						'playItemSelecter': '.mohe-cont',
+						'pluginList': ['playlist', 'player', 'operate', 'position', 'autoplay', 'lyric', 'position_slider', 'musicinfo', 'showtime', 'destruct']
+					});
+					var p2 = new PlayBox({
+						'playboxElement': $('.mh-box-2', root),
+						'pluginList': ['playlist', 'player', 'operate', 'position', 'autoplay', 'destruct']
+					});
+
+					p1._playManager.on('start', function() {
+						p2.stop();
+					});
+					p2._playManager.on('start', function() {
+						p1.stop();
+					});
+				})();
+				</script>
+
+			</div>
+		</div>
+	</div>
+</body>
