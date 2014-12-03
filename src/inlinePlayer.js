@@ -60,7 +60,7 @@
 			url: '',
 			volume: 50,
 			stream: true,
-			autoLoad : true,
+			autoLoad : true, //需要为true
 			autoPlay : false
 		};
 
@@ -130,23 +130,27 @@
 		'player': function(pm){
 			pm.on('play', function(){
 				var oSound = pm.soundObject;
-				if ( oSound) {
+				if ( oSound && !oSound._native) {
+					oSound._native = false;
 					oSound.playState == 0 ? oSound.play() : oSound.resume();
 				}
 
 			}).on('pause', function(){
 				var oSound = pm.soundObject;
-				if (oSound) {
+				if (oSound && !oSound._native) {
+					oSound._native = false;
 					oSound.pause();
 				}
 			}).on('stop', function(){
 				var oSound = pm.soundObject;
-				if (oSound) {
+				if (oSound && !oSound._native) {
+					oSound._native = false;
 					oSound.stop();
 				}
 			}).on('loadfail failure', function(e){
 				var oSound = pm.soundObject;
-				if (oSound && !oSound.loaded) { // 移动端chrome32里有误触发，增加loaded判断
+				if (oSound && !oSound.loaded && !oSound._native) { // 移动端chrome32里有误触发，增加loaded判断
+					oSound._native = false;
 					oSound.stop();
 					oSound.unload();
 					oSound.destruct();
@@ -155,8 +159,8 @@
 			});
 		},
 		'playlist': function(pm){
-			pm.on('start', function(e){
-				var id = e._args && e._args.id;
+			pm.on('start', function(e, data){
+				var id = data && data.id;
 
 				if (!id) { return; }
 
@@ -318,10 +322,13 @@
 							pm.triggerHandler('play');
 						} else {
 							// 配置的autoLoad需要为true。
-							pm.soundObject._iO._oncanplay = function(){
+							var play = function(){
+								clearTimeout(timer);
 								pm.triggerHandler('play');
 								pm.soundObject._iO._oncanplay = null;
 							};
+							var timer = setTimeout(play, 300);
+							pm.soundObject._iO._oncanplay = play;
 						}
 					}
 				}, 200);
@@ -418,22 +425,38 @@
 
 			onplay: function(e){
 				//console.log('onplay',e);
-				//pm.triggerHandler('play');
+				if (this._native !== false) {
+					this._native = true;
+					pm.triggerHandler('play');
+				}
+				this._native = null;
 			},
 
 			onpause: function(e){
 				//console.log('onpause',e);
-				//pm.triggerHandler('pause');
+				if (this._native !== false) {
+					this._native = true;
+					pm.triggerHandler('pause');
+				}
+				this._native = null;
 			},
 
 			onresume: function(e){
 				//console.log('onresume',e);
-				//pm.triggerHandler('play');
+				if (this._native !== false) {
+					this._native = true;
+					pm.triggerHandler('play');
+				}
+				this._native = null;
 			},
 
 			onstop: function(e){
 				//console.log('onstop',e);
-				//pm.triggerHandler('stop');
+				if (this._native !== false) {
+					this._native = true;
+					pm.triggerHandler('stop');
+				}
+				this._native = null;
 			},
 
 			onfinish: function(e){
@@ -464,6 +487,12 @@
 			onerror: function(e){
 				//console.log('onerror',e);
 				pm.triggerHandler('error');
+			},
+
+			onstalled: function(e){
+				if (this._a && this._a.paused) {
+					pm.triggerHandler('pause');
+				};
 			}
 		});
 	}
